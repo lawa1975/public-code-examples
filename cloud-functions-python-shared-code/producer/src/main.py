@@ -1,7 +1,10 @@
 import functions_framework
 import os
-import json
 from google.cloud import pubsub_v1
+from security import Security
+from market_quotation import MarketQuotation
+from datetime import datetime
+
 
 PROJECT_ID = os.environ.get('PROJECT_ID')
 TOPIC_ID = os.environ.get('TOPIC_ID')
@@ -13,18 +16,19 @@ topic_path = publisher.topic_path(PROJECT_ID, TOPIC_ID)
 def producer_function(request):
     request_json = request.get_json(silent=True)
 
-    if request_json and 'isin' in request_json:
-        isin = request_json['isin']
+    if not request_json:
+        return
+    
+    if 'market_value' not in request_json:
+        return
+    
+    now = str(datetime.now().timestamp()).replace('.', '')
 
-    if request_json and 'price' in request_json:
-        price = request_json['price']
+    security = Security('US0378331005', 'Apple')
 
-    stock_price = {
-        'isin': isin,
-        'price': price,
-    }
+    market_quotation = MarketQuotation(now, security, request_json['market_value'])
 
-    data = json.dumps(stock_price).encode("utf-8")
+    data = market_quotation.to_json().encode("utf-8")
 
     publisher.publish(topic_path, data)
     
