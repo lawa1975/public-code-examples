@@ -24,9 +24,7 @@ class MarketQuotation:
 
     timestamp = input_dict['timestamp']
     market_value = input_dict['market_value']
-    security = Security(
-      input_dict['security']['isin'],
-      input_dict['security']['name'])
+    security = Security.from_dict(input_dict['security'])
     
     return MarketQuotation(timestamp, security, market_value)
 
