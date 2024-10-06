@@ -1,3 +1,6 @@
 __pycache__
 .venv
 NOTES.md
+**/dist
+**/*.egg-info
+**/src/*.backup

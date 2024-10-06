@@ -1,7 +1,7 @@
 import functions_framework
 import os
 from google.cloud import storage
-from market_quotation import MarketQuotation
+from shared_code.model import MarketQuotation
 
 
 BUCKET_NAME = os.environ.get('BUCKET_NAME')
