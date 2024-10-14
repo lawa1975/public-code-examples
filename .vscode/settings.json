@@ -1,5 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./cloud-functions-python-shared-code/shared-code/src"
-    ]
-}
