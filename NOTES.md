@@ -2,23 +2,23 @@
 
 ## Create
 ```
-python -m venv .venv
+$ python -m venv .venv
 ```
 
 ## Activate
 Windows using CMD:
 ```
-path\to\venv\Scripts\activate.bat
+$ path\to\venv\Scripts\activate.bat
 ```
 Windows with PowerShell:
 ```
-path\to\venv\Scripts\Activate.ps1
+$ path\to\venv\Scripts\Activate.ps1
 ```
 
 ## Deactivate
 Windows with CMD:
 ```
-path\to\venv\Scripts\deactivate.bat
+$ path\to\venv\Scripts\deactivate.bat
 ```
 
 ## Visual Code IDE
@@ -26,11 +26,11 @@ Enter Shift+Ctrl+P on Windows and Linux (Shift+Cmd+P on macOS) to open the Comma
 
 # Install dependencies
 ```
-python -m pip install -r requirements.txt
+$ python -m pip install -r requirements.txt
 ```
 or
 ```
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 # GCP
@@ -38,61 +38,89 @@ pip install -r requirements.txt
 ## Cloud Storage
 Create bucket:
 ```
-gcloud storage buckets create gs://shared-code-securities-recording-c3bb5c7b --project=gcp-playground-202401 --default-storage-class=STANDARD --location=europe-west1 --uniform-bucket-level-access
+$ gcloud storage buckets create gs://shared-code-securities-recording-00000000 ^
+  --project=gcp-playground-000000 ^
+  --default-storage-class=STANDARD ^
+  --location=europe-west1 ^
+  --uniform-bucket-level-access
 ```
 
 ## Cloud run functions
 Run on local machine with functions framework:
 ```
-functions-framework-python --target producer_a http://127.0.0.1:8080
+$ functions-framework-python --target producer_a http://127.0.0.1:8080
 ```
 
 Deploy cloud run function (with Windows-like line breaks):
 ```
-gcloud functions deploy python-shared-code-producer-a ^
---gen2 ^
---runtime=python312 ^
---region=europe-west1 ^
---source=./src ^
---entry-point=producer_a_function ^
---trigger-http ^
---allow-unauthenticated
+$ gcloud functions deploy some-function-name ^
+  --gen2 ^
+  --runtime=python312 ^
+  --region=europe-west1 ^
+  --source=./src ^
+  --entry-point=some_entry_function ^
+  --trigger-http ^
+  --allow-unauthenticated
 ```
 
 Deploy *producer* function:
 ```
-gcloud functions deploy python-shared-code-producer --gen2 --runtime=python312 --region=europe-west1 --source=./src --entry-point=producer_function --trigger-http --allow-unauthenticated --set-env-vars PROJECT_ID=gcp-playground-202401,TOPIC_ID=example-topic
+$ gcloud functions deploy python-shared-code-producer ^
+  --gen2 ^
+  --runtime=python312 ^
+  --region=europe-west1 ^
+  --source=./cloud-functions-python-shared-code/producer/src ^  
+  --entry-point=producer_function ^
+  --trigger-http ^
+  --allow-unauthenticated ^
+  --set-env-vars PROJECT_ID=gcp-playground-000000,TOPIC_ID=example-topic
 ```
 
 Delete *producer* function:
 ```
-gcloud functions delete python-shared-code-producer --gen2 --region=europe-west1
+$ gcloud functions delete python-shared-code-producer --gen2 --region=europe-west1
 ```
 
 Deploy *consumer-a* function:
 ```
-gcloud functions deploy python-shared-code-consumer-a --gen2 --runtime=python312 --region=europe-west1 --source=./src --entry-point=consumer_a_function --trigger-topic=example-topic --set-env-vars BUCKET_NAME=shared-code-securities-recording-c3bb5c7b
+$ gcloud functions deploy python-shared-code-consumer-a ^
+  --gen2 ^
+  --runtime=python312 ^
+  --region=europe-west1 ^
+  --source=./cloud-functions-python-shared-code/consumer-a/src ^
+  --entry-point=consumer_a_function ^
+  --trigger-topic=example-topic ^
+  --set-env-vars BUCKET_NAME=shared-code-securities-recording-00000000
 ```
 
 Deploy *consumer-b* function:
 ```
-gcloud functions deploy python-shared-code-consumer-b --gen2 --runtime=python312 --region=europe-west1 --source=./src --entry-point=consumer_b_function --trigger-topic=example-topic
+$ gcloud functions deploy python-shared-code-consumer-b ^
+  --gen2 ^
+  --runtime=python312 ^
+  --region=europe-west1 ^
+  --source=./cloud-functions-python-shared-code/consumer-b/src ^
+  --entry-point=consumer_b_function ^
+  --trigger-topic=example-topic
 ```
 
 ## Pub/Sub
 Create topic:
 ```
-gcloud pubsub topics create example-topic
+$ gcloud pubsub topics create example-topic
 ```
 
 Create subscription:
 ```
-gcloud pubsub subscriptions create example-topic-sub-default --topic=projects/gcp-playground-202401/topics/example-topic
+$ gcloud pubsub subscriptions create example-topic-sub-default ^
+  --topic=projects/gcp-playground-000000/topics/example-topic
 ```
 
 Publish message to topic:
 ```
-gcloud pubsub topics publish projects/gcp-playground-202401/topics/example-topic --message="Robbie Williams" --attribute="origin=gcloud-sample,username=gcp,eventTime='2021-01-01T12:00:00Z'"
+$ gcloud pubsub topics publish projects/gcp-playground-000000/topics/example-topic ^
+  --message="Robbie Williams" ^
+  --attribute="origin=gcloud-sample,username=gcp,eventTime='2021-01-01T12:00:00Z'"
 ```
 
 # Data
