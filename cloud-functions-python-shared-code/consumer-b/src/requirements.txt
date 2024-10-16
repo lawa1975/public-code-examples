@@ -1,2 +1,4 @@
-functions-framework==3.*
+functions-framework
+google-cloud-logging
+./dist/shared_code_lib-0.0.0-py3-none-any.whl
 #-e ../../shared-code

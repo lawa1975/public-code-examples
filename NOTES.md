@@ -66,14 +66,11 @@ $ gcloud functions deploy some-function-name ^
 Deploy *producer* function:
 ```
 $ gcloud functions deploy python-shared-code-producer ^
-  --gen2 ^
-  --runtime=python312 ^
-  --region=europe-west1 ^
-  --source=./cloud-functions-python-shared-code/producer/src ^  
+  --gen2 --runtime=python312 --region=europe-west1 --allow-unauthenticated ^
+  --source=./cloud-functions-python-shared-code/producer/src ^
   --entry-point=producer_function ^
   --trigger-http ^
-  --allow-unauthenticated ^
-  --set-env-vars PROJECT_ID=gcp-playground-000000,TOPIC_ID=example-topic
+  --set-env-vars LOG_LEVEL=INFO,PROJECT_ID=gcp-playground-000000,TOPIC_ID=example-topic
 ```
 
 Delete *producer* function:
@@ -84,24 +81,21 @@ $ gcloud functions delete python-shared-code-producer --gen2 --region=europe-wes
 Deploy *consumer-a* function:
 ```
 $ gcloud functions deploy python-shared-code-consumer-a ^
-  --gen2 ^
-  --runtime=python312 ^
-  --region=europe-west1 ^
+  --gen2 --runtime=python312 --region=europe-west1 --allow-unauthenticated ^
   --source=./cloud-functions-python-shared-code/consumer-a/src ^
   --entry-point=consumer_a_function ^
   --trigger-topic=example-topic ^
-  --set-env-vars BUCKET_NAME=shared-code-securities-recording-00000000
+  --set-env-vars LOG_LEVEL=INFO,BUCKET_NAME=shared-code-securities-recording-00000000
 ```
 
 Deploy *consumer-b* function:
 ```
 $ gcloud functions deploy python-shared-code-consumer-b ^
-  --gen2 ^
-  --runtime=python312 ^
-  --region=europe-west1 ^
+  --gen2 --runtime=python312 --region=europe-west1 --allow-unauthenticated ^
   --source=./cloud-functions-python-shared-code/consumer-b/src ^
   --entry-point=consumer_b_function ^
-  --trigger-topic=example-topic
+  --trigger-topic=example-topic ^
+  --set-env-vars LOG_LEVEL=INFO
 ```
 
 ## Pub/Sub
@@ -143,3 +137,5 @@ $ gcloud pubsub topics publish projects/gcp-playground-000000/topics/example-top
 - https://medium.com/google-cloud/setup-and-invoke-cloud-functions-using-python-e801a8633096
 - https://www.computerwoche.de/a/virtual-environments-in-python-erklaert,3615103
 - https://flask.palletsprojects.com/en/1.1.x/api/#incoming-request-data
+- https://cloud.google.com/python/docs/reference/logging/latest/handlers-cloud-logging
+- https://cloud.google.com/logging/docs/setup/python#connecting_the_library_to_python_logging
